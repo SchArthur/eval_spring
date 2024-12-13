@@ -32,6 +32,7 @@ public class Utilisateur {
     @JsonView({EntrepriseView.class, ConventionView.class, UtilisateurView.class})
     String email;
 
+    @JsonIgnore
     String password;
 
     @OneToOne(mappedBy = "utilisateur", cascade = CascadeType.ALL)
