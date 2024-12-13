@@ -30,6 +30,7 @@ public class ConventionController {
 
     // READ
     @JsonView(ConventionView.class)
+    @IsAdmin
     @GetMapping("/convention")
     public List<Convention> getAllConvention() {
 
@@ -39,13 +40,19 @@ public class ConventionController {
 
     // READ
     @JsonView(ConventionView.class)
+    @IsEntreprise
     @GetMapping("/convention/{id}")
-    public ResponseEntity<Convention> getConventionById(@PathVariable int id) {
+    public ResponseEntity<Convention> getConventionById(@PathVariable int id, @AuthenticationPrincipal AppUserDetails appUserDetails) {
 
         Optional<Convention> optionalConvention = conventionDao.findById(id);
 
         if(optionalConvention.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if(!appUserDetails.getUtilisateur().getDroit().equals("ADMINISTRATEUR") &&
+                !optionalConvention.get().getEntreprise().getUtilisateur().getId().equals(appUserDetails.getUtilisateur().getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         return new ResponseEntity<>(optionalConvention.get(), HttpStatus.OK);

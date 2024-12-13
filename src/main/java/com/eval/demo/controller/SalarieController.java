@@ -4,13 +4,16 @@ import com.eval.demo.dao.ConventionDao;
 import com.eval.demo.dao.SalarieDao;
 import com.eval.demo.model.Convention;
 import com.eval.demo.model.Salarie;
+import com.eval.demo.security.AppUserDetails;
 import com.eval.demo.security.IsAdmin;
+import com.eval.demo.security.IsEntreprise;
 import com.eval.demo.view.SalarieView;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
@@ -56,15 +59,20 @@ public class SalarieController {
 
     // CREATE
     @JsonView(SalarieView.class)
-    @IsAdmin
+    @IsEntreprise
     @PostMapping("/salarie")
-    public ResponseEntity<Salarie> createSalarie(@RequestBody @Valid Salarie salarie) {
+    public ResponseEntity<Salarie> createSalarie(@RequestBody @Valid Salarie salarie, @AuthenticationPrincipal AppUserDetails appUserDetails) {
         Integer conventionId = salarie.getConvention().getId();
 
         Optional<Convention> optionalConvention = conventionDao.findById(conventionId);
 
         if(optionalConvention.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if(!appUserDetails.getUtilisateur().getDroit().equals("ADMINISTRATEUR") &&
+                !optionalConvention.get().getEntreprise().getUtilisateur().getId().equals(appUserDetails.getUtilisateur().getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         Integer maxSalaries = optionalConvention.get().getSalarieMaximum();
@@ -87,9 +95,9 @@ public class SalarieController {
 
     // DELETE
     @JsonView(SalarieView.class)
-    @IsAdmin
+    @IsEntreprise
     @DeleteMapping("/salarie/{id}")
-    public ResponseEntity<Salarie> deleteSalarie(@PathVariable Integer id) {
+    public ResponseEntity<Salarie> deleteSalarie(@PathVariable Integer id, @AuthenticationPrincipal AppUserDetails appUserDetails) {
 
         //On vérifie que l'Salarie existe bien dans la base de donnée
         Optional<Salarie> optionalSalarie = salarieDao.findById(id);
@@ -97,6 +105,11 @@ public class SalarieController {
         //si l'salarie n'existe pas
         if(optionalSalarie.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if(!appUserDetails.getUtilisateur().getDroit().equals("ADMINISTRATEUR") &&
+                !optionalSalarie.get().getConvention().getEntreprise().getUtilisateur().getId().equals(appUserDetails.getUtilisateur().getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         salarieDao.deleteById(id);
@@ -107,9 +120,9 @@ public class SalarieController {
 
     // UPDATE
     @JsonView(SalarieView.class)
-    @IsAdmin
+    @IsEntreprise
     @PutMapping("/salarie/{id}")
-    public ResponseEntity<Salarie> updateSalarie(@RequestBody @Valid Salarie salarieEnvoye, @PathVariable Integer id) {
+    public ResponseEntity<Salarie> updateSalarie(@RequestBody @Valid Salarie salarieEnvoye, @PathVariable Integer id, @AuthenticationPrincipal AppUserDetails appUserDetails) {
 
         salarieEnvoye.setId(id);
 
@@ -117,6 +130,11 @@ public class SalarieController {
 
         if(optionalSalarie.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if(!appUserDetails.getUtilisateur().getDroit().equals("ADMINISTRATEUR") &&
+                !optionalSalarie.get().getConvention().getEntreprise().getUtilisateur().getId().equals(appUserDetails.getUtilisateur().getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         salarieDao.save(salarieEnvoye);
