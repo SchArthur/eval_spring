@@ -36,6 +36,7 @@ public class SalarieController {
 
     // READ
     @JsonView(SalarieView.class)
+    @IsAdmin
     @GetMapping("/salarie")
     public List<Salarie> getAllSalarie() {
 
@@ -45,13 +46,19 @@ public class SalarieController {
 
     // READ
     @JsonView(SalarieView.class)
+    @IsEntreprise
     @GetMapping("/salarie/{id}")
-    public ResponseEntity<Salarie> getSalarieById(@PathVariable int id) {
+    public ResponseEntity<Salarie> getSalarieById(@PathVariable int id, @AuthenticationPrincipal AppUserDetails appUserDetails) {
 
         Optional<Salarie> optionalSalarie = salarieDao.findById(id);
 
         if(optionalSalarie.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if(!appUserDetails.getUtilisateur().getDroit().equals("ADMINISTRATEUR") &&
+                !optionalSalarie.get().getConvention().getEntreprise().getUtilisateur().getId().equals(appUserDetails.getUtilisateur().getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         return new ResponseEntity<>(optionalSalarie.get(), HttpStatus.OK);
