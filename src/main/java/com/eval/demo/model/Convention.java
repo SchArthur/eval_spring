@@ -26,7 +26,7 @@ public class Convention {
     @PositiveOrZero(message = "La subvention ne peut pas être négative.")
     Float subvention;
 
-    @PositiveOrZero(message = "Le nombre de salariés maximum ne peut pas être négatif.")
+    @Min(value = 1, message = "Le nombre de salariés maximum doit être au moins 1.")
     Integer salarieMaximum;
 
     @ManyToOne(fetch = FetchType.EAGER)
