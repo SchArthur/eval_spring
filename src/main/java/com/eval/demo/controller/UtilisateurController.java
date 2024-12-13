@@ -2,6 +2,7 @@ package com.eval.demo.controller;
 
 import com.eval.demo.dao.UtilisateurDao;
 import com.eval.demo.model.Utilisateur;
+import com.eval.demo.security.IsAdmin;
 import com.eval.demo.view.UtilisateurView;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
@@ -29,6 +30,7 @@ public class UtilisateurController {
     }
 
     // READ
+    @IsAdmin
     @JsonView(UtilisateurView.class)
     @GetMapping("/utilisateur")
     public List<Utilisateur> getAllUtilisateur() {

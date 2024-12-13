@@ -2,6 +2,7 @@ package com.eval.demo.controller;
 
 import com.eval.demo.dao.ConventionDao;
 import com.eval.demo.model.Convention;
+import com.eval.demo.security.IsAdmin;
 import com.eval.demo.view.ConventionView;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
@@ -49,6 +50,7 @@ public class ConventionController {
 
     // CREATE
     @JsonView(ConventionView.class)
+    @IsAdmin
     @PostMapping("/convention")
     public ResponseEntity<Convention> createConvention(@RequestBody @Valid Convention convention) {
 
@@ -62,6 +64,7 @@ public class ConventionController {
 
     // DELETE
     @JsonView(ConventionView.class)
+    @IsAdmin
     @DeleteMapping("/convention/{id}")
     public ResponseEntity<Convention> deleteConvention(@PathVariable Integer id) {
 
@@ -81,6 +84,7 @@ public class ConventionController {
 
     // UPDATE
     @JsonView(ConventionView.class)
+    @IsAdmin
     @PutMapping("/convention/{id}")
     public ResponseEntity<Convention> updateConvention(@RequestBody @Valid Convention conventionEnvoye, @PathVariable Integer id) {
 

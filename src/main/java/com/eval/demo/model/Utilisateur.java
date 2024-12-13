@@ -38,6 +38,13 @@ public class Utilisateur {
     @JsonView(UtilisateurView.class)
     Entreprise entreprise;
 
+    public String getDroit(){
+        if (entreprise != null){
+            return "ADMINISTRATEUR";
+        } else {
+            return "ENTREPRISE";
+        }
+    }
 
     public Integer getId() {
         return id;
