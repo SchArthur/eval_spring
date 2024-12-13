@@ -17,10 +17,10 @@ INSERT INTO `entreprise` (`utilisateur_id`, `nom`) VALUES
 -- Données de test pour la table `convention`
 
 INSERT INTO `convention` (`entreprise_id`, `salarie_maximum`, `subvention`, `nom`) VALUES
-(1, 50, 10000.00, 'Convention Alpha'),
-(2, 100, 20000.00, 'Convention Beta'),
-(3, 200, 30000.00, 'Convention Gamma'),
-(4, 500, 50000.00, 'Convention Omega');
+(1, 10, 10000.00, 'Convention Alpha'),
+(2, 15, 20000.00, 'Convention Beta'),
+(3, 18, 30000.00, 'Convention Gamma'),
+(4, 24, 50000.00, 'Convention Omega');
 
 -- Données de test pour la table `salarie`
 

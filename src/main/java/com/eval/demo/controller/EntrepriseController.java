@@ -2,6 +2,7 @@ package com.eval.demo.controller;
 
 import com.eval.demo.dao.EntrepriseDao;
 import com.eval.demo.model.Entreprise;
+import com.eval.demo.security.IsAdmin;
 import com.eval.demo.view.EntrepriseView;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
@@ -49,6 +50,7 @@ public class EntrepriseController {
 
     // CREATE
     @JsonView(EntrepriseView.class)
+    @IsAdmin
     @PostMapping("/entreprise")
     public ResponseEntity<Entreprise> createEntreprise(@RequestBody @Valid Entreprise entreprise) {
 
@@ -62,6 +64,7 @@ public class EntrepriseController {
 
     // DELETE
     @JsonView(EntrepriseView.class)
+    @IsAdmin
     @DeleteMapping("/entreprise/{id}")
     public ResponseEntity<Entreprise> deleteEntreprise(@PathVariable Integer id) {
 
@@ -81,6 +84,7 @@ public class EntrepriseController {
 
     // UPDATE
     @JsonView(EntrepriseView.class)
+    @IsAdmin
     @PutMapping("/entreprise/{id}")
     public ResponseEntity<Entreprise> updateEntreprise(@RequestBody @Valid Entreprise entrepriseEnvoye, @PathVariable Integer id) {
 

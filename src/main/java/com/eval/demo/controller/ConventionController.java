@@ -2,13 +2,16 @@ package com.eval.demo.controller;
 
 import com.eval.demo.dao.ConventionDao;
 import com.eval.demo.model.Convention;
+import com.eval.demo.security.AppUserDetails;
 import com.eval.demo.security.IsAdmin;
+import com.eval.demo.security.IsEntreprise;
 import com.eval.demo.view.ConventionView;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -84,9 +87,11 @@ public class ConventionController {
 
     // UPDATE
     @JsonView(ConventionView.class)
-    @IsAdmin
+    @IsEntreprise
     @PutMapping("/convention/{id}")
-    public ResponseEntity<Convention> updateConvention(@RequestBody @Valid Convention conventionEnvoye, @PathVariable Integer id) {
+    public ResponseEntity<Convention> updateConvention(@RequestBody @Valid Convention conventionEnvoye, @PathVariable Integer id, @AuthenticationPrincipal AppUserDetails appUserDetails) {
+
+        /*System.out.println(appUserDetails.getUtilisateur().getDroit());*/
 
         conventionEnvoye.setId(id);
 
@@ -94,6 +99,11 @@ public class ConventionController {
 
         if(optionalConvention.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if(!appUserDetails.getUtilisateur().getDroit().equals("ADMINISTRATEUR") &&
+                !optionalConvention.get().getEntreprise().getUtilisateur().getId().equals(appUserDetails.getUtilisateur().getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         conventionDao.save(conventionEnvoye);

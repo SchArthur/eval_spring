@@ -55,6 +55,7 @@ public class UtilisateurController {
 
     // CREATE
     @JsonView(UtilisateurView.class)
+    @IsAdmin
     @PostMapping("/utilisateur")
     public ResponseEntity<Utilisateur> createUtilisateur(@RequestBody @Valid Utilisateur utilisateur) {
 
@@ -70,6 +71,7 @@ public class UtilisateurController {
 
     // DELETE
     @JsonView(UtilisateurView.class)
+    @IsAdmin
     @DeleteMapping("/utilisateur/{id}")
     public ResponseEntity<Utilisateur> deleteUtilisateur(@PathVariable Integer id) {
 
@@ -89,6 +91,7 @@ public class UtilisateurController {
 
     // UPDATE
     @JsonView(UtilisateurView.class)
+    @IsAdmin
     @PutMapping("/utilisateur/{id}")
     public ResponseEntity<Utilisateur> updateUtilisateur(@RequestBody @Valid Utilisateur utilisateurEnvoye, @PathVariable Integer id) {
 

@@ -39,7 +39,7 @@ public class Utilisateur {
     Entreprise entreprise;
 
     public String getDroit(){
-        if (entreprise != null){
+        if (entreprise == null){
             return "ADMINISTRATEUR";
         } else {
             return "ENTREPRISE";
