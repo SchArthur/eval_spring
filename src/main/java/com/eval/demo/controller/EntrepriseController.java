@@ -2,6 +2,8 @@ package com.eval.demo.controller;
 
 import com.eval.demo.dao.EntrepriseDao;
 import com.eval.demo.model.Entreprise;
+import com.eval.demo.view.EntrepriseView;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ public class EntrepriseController {
         this.entrepriseDao = entrepriseDao;
     }
 
+    @JsonView(EntrepriseView.class)
     @GetMapping("/entreprise")
     public List<Entreprise> getAllEntreprise() {
 
@@ -31,6 +34,7 @@ public class EntrepriseController {
 
     }
 
+    @JsonView(EntrepriseView.class)
     @GetMapping("/entreprise/{id}")
     public ResponseEntity<Entreprise> getEntrepriseById(@PathVariable int id) {
 

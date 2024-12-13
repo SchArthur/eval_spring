@@ -1,5 +1,7 @@
 package com.eval.demo.model;
 
+import com.eval.demo.view.EntrepriseView;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -20,8 +22,10 @@ public class Convention {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(EntrepriseView.class)
     Integer id;
 
+    @JsonView(EntrepriseView.class)
     String nom;
 
     @PositiveOrZero(message = "La subvention ne peut pas être négative.")

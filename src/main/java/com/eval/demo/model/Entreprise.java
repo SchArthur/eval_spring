@@ -1,5 +1,7 @@
 package com.eval.demo.model;
 
+import com.eval.demo.view.EntrepriseView;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -18,16 +20,20 @@ public class Entreprise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(EntrepriseView.class)
     Integer id;
 
     @Column(length = 100, unique = true)
     @NotBlank(message = "Le nom de l'entreprise ne peut pas être vide")
+    @JsonView(EntrepriseView.class)
     String nom;
 
     @OneToOne
+    @JsonView(EntrepriseView.class)
     Utilisateur  utilisateur;
 
     @OneToMany(mappedBy = "entreprise")
+    @JsonView(EntrepriseView.class)
     List<Convention> conventions;
 
     public Integer getId() {

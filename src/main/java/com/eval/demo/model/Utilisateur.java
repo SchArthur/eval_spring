@@ -1,5 +1,6 @@
 package com.eval.demo.model;
 
+import com.eval.demo.view.EntrepriseView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
@@ -21,10 +22,12 @@ public class Utilisateur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(EntrepriseView.class)
     Integer id;
 
     @Column(length = 100, unique = true)
     @NotBlank(message = "L'adresse email ne peut pas être vide")
+    @JsonView(EntrepriseView.class)
     String email;
 
     String password;
