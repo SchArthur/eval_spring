@@ -2,13 +2,16 @@ package com.eval.demo.controller;
 
 import com.eval.demo.dao.EntrepriseDao;
 import com.eval.demo.model.Entreprise;
+import com.eval.demo.security.AppUserDetails;
 import com.eval.demo.security.IsAdmin;
+import com.eval.demo.security.IsEntreprise;
 import com.eval.demo.view.EntrepriseView;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,13 +39,19 @@ public class EntrepriseController {
 
     // READ
     @JsonView(EntrepriseView.class)
+    @IsEntreprise
     @GetMapping("/entreprise/{id}")
-    public ResponseEntity<Entreprise> getEntrepriseById(@PathVariable int id) {
+    public ResponseEntity<Entreprise> getEntrepriseById(@PathVariable int id, @AuthenticationPrincipal AppUserDetails appUserDetails) {
 
         Optional<Entreprise> optionalEntreprise = entrepriseDao.findById(id);
 
         if(optionalEntreprise.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if(!appUserDetails.getUtilisateur().getDroit().equals("ADMINISTRATEUR") &&
+                !optionalEntreprise.get().getUtilisateur().getId().equals(appUserDetails.getUtilisateur().getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         return new ResponseEntity<>(optionalEntreprise.get(), HttpStatus.OK);
