@@ -2,6 +2,7 @@ package com.eval.demo.controller;
 
 import com.eval.demo.dao.ConventionDao;
 import com.eval.demo.model.Convention;
+import com.eval.demo.view.ConventionView;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class ConventionController {
     }
 
     // READ
+    @JsonView(ConventionView.class)
     @GetMapping("/convention")
     public List<Convention> getAllConvention() {
 
@@ -32,6 +34,7 @@ public class ConventionController {
     }
 
     // READ
+    @JsonView(ConventionView.class)
     @GetMapping("/convention/{id}")
     public ResponseEntity<Convention> getConventionById(@PathVariable int id) {
 
@@ -45,6 +48,7 @@ public class ConventionController {
     }
 
     // CREATE
+    @JsonView(ConventionView.class)
     @PostMapping("/convention")
     public ResponseEntity<Convention> createConvention(@RequestBody @Valid Convention convention) {
 
@@ -57,6 +61,7 @@ public class ConventionController {
     }
 
     // DELETE
+    @JsonView(ConventionView.class)
     @DeleteMapping("/convention/{id}")
     public ResponseEntity<Convention> deleteConvention(@PathVariable Integer id) {
 
@@ -75,6 +80,7 @@ public class ConventionController {
     }
 
     // UPDATE
+    @JsonView(ConventionView.class)
     @PutMapping("/convention/{id}")
     public ResponseEntity<Convention> updateConvention(@RequestBody @Valid Convention conventionEnvoye, @PathVariable Integer id) {
 

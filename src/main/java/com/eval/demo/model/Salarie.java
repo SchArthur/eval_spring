@@ -1,5 +1,7 @@
 package com.eval.demo.model;
 
+import com.eval.demo.view.ConventionView;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -18,12 +20,15 @@ public class Salarie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(ConventionView.class)
     Integer id;
 
     @Size(min = 3, max = 10, message = "Le matricule doit contenir entre 3 et 10 caractères.")
+    @JsonView(ConventionView.class)
     String matricule;
 
     @NotBlank(message = "Le code barre ne peut pas être vide")
+    @JsonView(ConventionView.class)
     String codeBarre;
 
     @ManyToOne

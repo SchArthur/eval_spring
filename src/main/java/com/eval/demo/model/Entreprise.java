@@ -1,5 +1,6 @@
 package com.eval.demo.model;
 
+import com.eval.demo.view.ConventionView;
 import com.eval.demo.view.EntrepriseView;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
@@ -20,16 +21,16 @@ public class Entreprise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(EntrepriseView.class)
+    @JsonView({EntrepriseView.class, ConventionView.class})
     Integer id;
 
     @Column(length = 100, unique = true)
     @NotBlank(message = "Le nom de l'entreprise ne peut pas être vide")
-    @JsonView(EntrepriseView.class)
+    @JsonView({EntrepriseView.class, ConventionView.class})
     String nom;
 
     @OneToOne
-    @JsonView(EntrepriseView.class)
+    @JsonView({EntrepriseView.class, ConventionView.class})
     Utilisateur  utilisateur;
 
     @OneToMany(mappedBy = "entreprise", cascade = CascadeType.ALL)

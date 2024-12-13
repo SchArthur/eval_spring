@@ -1,5 +1,6 @@
 package com.eval.demo.model;
 
+import com.eval.demo.view.ConventionView;
 import com.eval.demo.view.EntrepriseView;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
@@ -22,22 +23,26 @@ public class Convention {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(EntrepriseView.class)
+    @JsonView({EntrepriseView.class, ConventionView.class})
     Integer id;
 
-    @JsonView(EntrepriseView.class)
+    @JsonView({EntrepriseView.class, ConventionView.class})
     String nom;
 
     @PositiveOrZero(message = "La subvention ne peut pas être négative.")
+    @JsonView(ConventionView.class)
     Float subvention;
 
     @Min(value = 1, message = "Le nombre de salariés maximum doit être au moins 1.")
+    @JsonView(ConventionView.class)
     Integer salarieMaximum;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonView(ConventionView.class)
     Entreprise entreprise;
 
     @OneToMany(mappedBy = "convention", cascade = CascadeType.ALL)
+    @JsonView(ConventionView.class)
     List<Salarie> salaries;
 
     public Integer getId() {
