@@ -2,6 +2,7 @@ package com.eval.demo.model;
 
 import com.eval.demo.view.ConventionView;
 import com.eval.demo.view.EntrepriseView;
+import com.eval.demo.view.SalarieView;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -26,7 +27,7 @@ public class Convention {
     @JsonView({EntrepriseView.class, ConventionView.class})
     Integer id;
 
-    @JsonView({EntrepriseView.class, ConventionView.class})
+    @JsonView({EntrepriseView.class, ConventionView.class, SalarieView.class})
     String nom;
 
     @PositiveOrZero(message = "La subvention ne peut pas être négative.")
