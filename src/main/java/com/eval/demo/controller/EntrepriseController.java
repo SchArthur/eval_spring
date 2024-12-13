@@ -30,6 +30,7 @@ public class EntrepriseController {
 
     // READ
     @JsonView(EntrepriseView.class)
+    @IsEntreprise
     @GetMapping("/entreprise")
     public List<Entreprise> getAllEntreprise() {
 
