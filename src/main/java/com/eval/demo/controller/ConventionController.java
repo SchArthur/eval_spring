@@ -74,7 +74,7 @@ public class ConventionController {
 
     // DELETE
     @JsonView(ConventionView.class)
-    @IsEntreprise
+    @IsAdmin
     @DeleteMapping("/convention/{id}")
     public ResponseEntity<Convention> deleteConvention(@PathVariable Integer id, @AuthenticationPrincipal AppUserDetails appUserDetails) {
 
@@ -84,11 +84,6 @@ public class ConventionController {
         //si l'convention n'existe pas
         if(optionalConvention.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        if(!appUserDetails.getUtilisateur().getDroit().equals("ADMINISTRATEUR") &&
-                !optionalConvention.get().getEntreprise().getUtilisateur().getId().equals(appUserDetails.getUtilisateur().getId())) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         conventionDao.deleteById(id);
