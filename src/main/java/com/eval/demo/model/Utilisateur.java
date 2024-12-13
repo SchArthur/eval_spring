@@ -29,4 +29,27 @@ public class Utilisateur {
 
     String password;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public @NotBlank(message = "L'adresse email ne peut pas être vide") String getEmail() {
+        return email;
+    }
+
+    public void setEmail(@NotBlank(message = "L'adresse email ne peut pas être vide") String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
