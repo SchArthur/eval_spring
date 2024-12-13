@@ -4,13 +4,11 @@ import com.eval.demo.dao.EntrepriseDao;
 import com.eval.demo.model.Entreprise;
 import com.eval.demo.view.EntrepriseView;
 import com.fasterxml.jackson.annotation.JsonView;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +24,7 @@ public class EntrepriseController {
         this.entrepriseDao = entrepriseDao;
     }
 
+    // READ
     @JsonView(EntrepriseView.class)
     @GetMapping("/entreprise")
     public List<Entreprise> getAllEntreprise() {
@@ -34,6 +33,7 @@ public class EntrepriseController {
 
     }
 
+    // READ
     @JsonView(EntrepriseView.class)
     @GetMapping("/entreprise/{id}")
     public ResponseEntity<Entreprise> getEntrepriseById(@PathVariable int id) {
@@ -45,6 +45,57 @@ public class EntrepriseController {
         }
 
         return new ResponseEntity<>(optionalEntreprise.get(), HttpStatus.OK);
+    }
+
+    // CREATE
+    @JsonView(EntrepriseView.class)
+    @PostMapping("/entreprise")
+    public ResponseEntity<Entreprise> createEntreprise(@RequestBody @Valid Entreprise entreprise) {
+
+        //on force l'id à null au cas où le client en aurait fourni un
+        entreprise.setId(null);
+
+        entrepriseDao.save(entreprise);
+
+        return new ResponseEntity<>(entreprise, HttpStatus.CREATED);
+    }
+
+    // DELETE
+    @JsonView(EntrepriseView.class)
+    @DeleteMapping("/entreprise/{id}")
+    public ResponseEntity<Entreprise> deleteEntreprise(@PathVariable Integer id) {
+
+        //On vérifie que l'Entreprise existe bien dans la base de donnée
+        Optional<Entreprise> optionalEntreprise = entrepriseDao.findById(id);
+
+        //si l'entreprise n'existe pas
+        if(optionalEntreprise.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        entrepriseDao.deleteById(id);
+
+        return new ResponseEntity<>(optionalEntreprise.get(), HttpStatus.OK);
+
+    }
+
+    // UPDATE
+    @JsonView(EntrepriseView.class)
+    @PutMapping("/entreprise/{id}")
+    public ResponseEntity<Entreprise> updateEntreprise(@RequestBody @Valid Entreprise entrepriseEnvoye, @PathVariable Integer id) {
+
+        entrepriseEnvoye.setId(id);
+
+        Optional<Entreprise> optionalEntreprise = entrepriseDao.findById(id);
+
+        if(optionalEntreprise.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        entrepriseDao.save(entrepriseEnvoye);
+
+        return new ResponseEntity<>(optionalEntreprise.get(), HttpStatus.OK);
+
     }
 
 }

@@ -37,7 +37,7 @@ public class Convention {
     @ManyToOne(fetch = FetchType.EAGER)
     Entreprise entreprise;
 
-    @OneToMany(mappedBy = "convention")
+    @OneToMany(mappedBy = "convention", cascade = CascadeType.ALL)
     List<Salarie> salaries;
 
     public Integer getId() {

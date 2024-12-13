@@ -32,7 +32,7 @@ public class Entreprise {
     @JsonView(EntrepriseView.class)
     Utilisateur  utilisateur;
 
-    @OneToMany(mappedBy = "entreprise")
+    @OneToMany(mappedBy = "entreprise", cascade = CascadeType.ALL)
     @JsonView(EntrepriseView.class)
     List<Convention> conventions;
 
