@@ -30,4 +30,35 @@ public class Entreprise {
     @OneToMany(mappedBy = "entreprise")
     List<Convention> conventions;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public @NotBlank(message = "Le nom de l'entreprise ne peut pas être vide") String getNom() {
+        return nom;
+    }
+
+    public void setNom(@NotBlank(message = "Le nom de l'entreprise ne peut pas être vide") String nom) {
+        this.nom = nom;
+    }
+
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
+
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
+
+    public List<Convention> getConventions() {
+        return conventions;
+    }
+
+    public void setConventions(List<Convention> conventions) {
+        this.conventions = conventions;
+    }
 }
